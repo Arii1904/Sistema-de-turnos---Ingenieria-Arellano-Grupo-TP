@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lavadero App - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 350px;
+        }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #5a67d8; }
+        .error { color: red; margin-top: 10px; text-align: center; }
+        .info { margin-top: 20px; font-size: 12px; color: #666; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>🚗 Lavadero App</h2>
+        <form id="loginForm">
+            <input type="text" id="email" placeholder="Email" autocomplete="off">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button type="button" onclick="hacerLogin()">Ingresar</button>
+            <div id="error" class="error"></div>
+        </form>
+        <div class="info">
+            <strong>Cuentas de prueba:</strong><br>
+            Admin: admin@lavadero.com / admin<br>
+            Empleado: empleado@lavadero.com / empleado<br>
+            Cajero: cajero@lavadero.com / cajero<br>
+            Cliente: cliente@lavadero.com / cliente
+        </div>
+    </div>
+
+    <script>
+        async function hacerLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            console.log("Email:", email);
+            console.log("Password:", password);
+            
+            if (!email || !password) {
+                document.getElementById('error').textContent = 'Complete todos los campos';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+                
+                const data = await response.json();
+                console.log("Respuesta:", data);
+                
+                if (data.success) {
+                    if (data.rol === 'admin') window.location.href = 'admin.html';
+                    else if (data.rol === 'empleado') window.location.href = 'empleado.html';
+                    else if (data.rol === 'cajero') window.location.href = 'cajero.html';
+                    else window.location.href = 'cliente.html';
+                } else {
+                    document.getElementById('error').textContent = data.error;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('error').textContent = 'Error de conexión';
+            }
+        }
+    </script>
+</body>
+</html>
