@@ -144,10 +144,3 @@ INICIAR_LAVADERO.bat
 👩‍💻 Autores de desarrollo:Bettina Gomez y Leandro Serrudo
 Autora de readme: Ariadna Villagra
 Autor de revisión: Roberto Villca
-
-
-
-
-Ariadna Villagra
-
-Analista y Programadora COBOL | Estudiante de Análisis de Sistemas de Información
